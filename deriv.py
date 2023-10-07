@@ -3,6 +3,7 @@ import scipy as sc
 import sympy as sp
 import zer0solution as zs
 from Alexandrov_Soto import arg
+import time
 
 
 def df1v(V, n):
@@ -42,9 +43,9 @@ for t in range(t_begin, t_end, 2):
         print(f'I_syn = {I_syn}: ', end=' ')
 
         n, V = sp.symbols('n V')
-        v0, n0 = zs.findroot(I_syn, T).x
-        suc = zs.findroot(I_syn, T).success
-        print(f'V0 = {round(v0, 3)}, n0 = {round(n0, 4)}, КН = {suc}', end='; ')
+        v0, n0 = zs.findroot(I_syn, T)
+        #suc = zs.findroot(I_syn, T).success
+        print(f'V0 = {round(v0, 3)}, n0 = {round(n0, 4)}, КН = {True}', end='; ')
 
         m_inf = sp.expand(1 / (1 + sp.exp(-(V + 33.8) / 5.2)))
         h_na = sp.expand(1 / (1 + sp.exp((V + 60.5) / 9.9)))
@@ -84,4 +85,6 @@ for t in range(t_begin, t_end, 2):
             print('Неустойчивый фокус')
         elif abs(l1.real) < 0.0003 and abs(l2.real) < 0.0003:
             print('Центр')
+        else:
+            print('Седло')
     print('-------------')

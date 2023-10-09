@@ -45,7 +45,14 @@ for t in range(t_begin, t_end, 2):
         n, V = sp.symbols('n V')
         v0, n0 = zs.findroot(I_syn, T)
         #suc = zs.findroot(I_syn, T).success
-        print(f'V0 = {round(v0, 3)}, n0 = {round(n0, 4)}, КН = {True}', end='; ')
+        pr = arg
+        pr[0] = I_syn
+        pr[-1] = 3**((T - 20) / 10)
+        if abs(max(zs.ur([v0, n0], arg)[0], zs.ur([v0, n0], arg)[1])) < 0.0001:  # Проверка корректности корня
+            suc = True
+        else:
+            suc = False
+        print(f'V0 = {round(v0, 3)}, n0 = {round(n0, 4)}, КН = {suc}', end='; ')
 
         m_inf = sp.expand(1 / (1 + sp.exp(-(V + 33.8) / 5.2)))
         h_na = sp.expand(1 / (1 + sp.exp((V + 60.5) / 9.9)))

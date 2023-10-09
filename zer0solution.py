@@ -17,7 +17,7 @@ def ur(y, par):
     I_l = g_l * (V - V_l)
 
     return [(I_syn - I_na - I_k - I_l),
-            (n_inf - n) * 1]
+            (n_inf - n) * Q]
 
 
 def findroot(i, t):
@@ -31,4 +31,8 @@ def findroot(i, t):
     return zero_solution
 
 
-print(findroot(0, 36))
+#print(findroot(0, 36))
+#arg = al.arg
+#arg[0] = 0
+#arg[-1] = 3**((36 - 20) / 10)
+#print(ur(findroot(0, 36), arg))

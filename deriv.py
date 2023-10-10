@@ -81,17 +81,18 @@ for t in range(t_begin, t_end, 2):
                 l1 = complex(key)
             else:
                 l2 = complex(key)
-            print(f'λ{k+1} = {key}', end=', ')
+            print(f'λ{k+1} = {round(key, 4)}', end=', ')
         if l1.imag == 0 and l2.imag == 0 and l1.real < 0 and l2.real < 0:
             print('Устойчивый узел')
         elif l1.imag == 0 and l2.imag == 0 and l1.real > 0 and l2.real > 0:
             print('Неустойчивый узел')
+        elif abs(l1.real) < 0.0003 and abs(l2.real) < 0.0003:
+            print('Центр')
         elif l1.imag != 0 and l2.imag != 0 and l1.real < 0 and l2.real < 0:
             print('Устойчивый фокус')
         elif l1.imag != 0 and l2.imag != 0 and l1.real > 0 and l2.real > 0:
             print('Неустойчивый фокус')
-        elif abs(l1.real) < 0.0003 and abs(l2.real) < 0.0003:
-            print('Центр')
+
         else:
             print('Седло')
     print('-------------')

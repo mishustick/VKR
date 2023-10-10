@@ -31,17 +31,21 @@ par = arg
 t_begin = 360  # Деленное на 10
 t_end = 374  # - 2
 j_begin = 0
-j_end = 18
+j_end = 13
 
-for t in range(t_begin, t_end, 2):
+f = open('TT.txt', 'w')
+
+
+for t in range(t_begin, t_end, 1):
     T = t / 10
     Q = 3 ** ((T - 20) / 10)
     print(f'T = {T}, Q(T) = {round(Q, 3)}')
+    f.write(f'T = {T}, Q(T) = {round(Q, 3)}'+'\n***\n')
     print('***')
-    for j in range(j_begin, j_end, 2):
+    for j in range(j_begin, j_end, 1):
         I_syn = j / 10
         print(f'I_syn = {I_syn}: ', end=' ')
-
+        f.write(f'I_syn = {I_syn};')
         n, V = sp.symbols('n V')
         v0, n0 = zs.findroot(I_syn, T)
         #suc = zs.findroot(I_syn, T).success
@@ -53,6 +57,7 @@ for t in range(t_begin, t_end, 2):
         else:
             suc = False
         print(f'V0 = {round(v0, 3)}, n0 = {round(n0, 4)}, КН = {suc}', end='; ')
+        f.write(f'V0 = {round(v0, 3)};n0 = {round(n0, 4)};КН = {suc},')
 
         m_inf = sp.expand(1 / (1 + sp.exp(-(V + 33.8) / 5.2)))
         h_na = sp.expand(1 / (1 + sp.exp((V + 60.5) / 9.9)))
@@ -82,17 +87,26 @@ for t in range(t_begin, t_end, 2):
             else:
                 l2 = complex(key)
             print(f'λ{k+1} = {round(key, 4)}', end=', ')
+            f.write(f'l{k+1} = {round(key, 4)}; ')
         if l1.imag == 0 and l2.imag == 0 and l1.real < 0 and l2.real < 0:
-            print('Устойчивый узел')
+            print('УУ')
+            f.write('УУ;\n')
         elif l1.imag == 0 and l2.imag == 0 and l1.real > 0 and l2.real > 0:
-            print('Неустойчивый узел')
+            print('НУ')
+            f.write('НУ;\n')
         elif abs(l1.real) < 0.0003 and abs(l2.real) < 0.0003:
             print('Центр')
+            f.write('Центр;\n')
         elif l1.imag != 0 and l2.imag != 0 and l1.real < 0 and l2.real < 0:
-            print('Устойчивый фокус')
+            print('УФ')
+            f.write('УФ;\n')
         elif l1.imag != 0 and l2.imag != 0 and l1.real > 0 and l2.real > 0:
-            print('Неустойчивый фокус')
-
+            print('НФ')
+            f.write('НФ;\n')
         else:
-            print('Седло')
+            print('С')
+            f.write('С;\n')
+    f.write('-------------\n')
     print('-------------')
+
+f.close()

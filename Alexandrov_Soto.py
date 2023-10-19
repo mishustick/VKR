@@ -18,9 +18,9 @@ def diff_ur(t, y, par):
             (n_inf - n) * Q / tau_n]
 
 
-t = np.linspace(0, 200, 3000)
-I_s = 0
-T = 36
+t = np.linspace(0, 100, 2000)
+I_s = 0.9
+T = 37
 Cm = 1
 V_Na = 52
 V_K = -84
@@ -32,10 +32,11 @@ h_K = 0.7329
 Q = 3**((T - 20) / 10)
 #Q = 8.4
 arg = np.array((I_s, Cm, V_Na, V_K, V_L, g_Na, g_K, g_L, h_K, Q))
+y0 = np.array((-59.109828596342865, 0.109366837166741))
 
 if __name__ == '__main__':
     print(Q)
-    y0 = np.array((-38.109828596342865, 0.349366837166741))
+
     sol = sc.integrate.odeint(diff_ur, y0, t, args=(arg, ), tfirst=True)
 
     fig1 = plt.figure(figsize=(10, 10))
@@ -53,10 +54,12 @@ if __name__ == '__main__':
     plt.grid()
     axt_v.set_xlabel('t, мc', size=20)
     axt_v.set_ylabel('V, мВ', size=20)
+    #axt_v.set_ylim([16, 17])
     axt_n = fig2.add_subplot(212)
     axt_n.plot(t, sol[:, 1], color='red')
     axt_n.set_xlabel('t, мc', size=20)
     axt_n.set_ylabel('n', size=20)
+    #axt_n.set_ylim([0.75, 0.88])
 
     plt.grid()
     plt.show()

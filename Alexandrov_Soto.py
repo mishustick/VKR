@@ -19,8 +19,8 @@ def diff_ur(t, y, par):
 
 
 t = np.linspace(0, 100, 2000)
-I_s = 0.9
-T = 37
+I_s = 1
+T = 36.0
 Cm = 1
 V_Na = 52
 V_K = -84

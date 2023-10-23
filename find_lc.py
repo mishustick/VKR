@@ -9,23 +9,24 @@ par = als.arg
 t = als.t
 y0 = als.y0
 f = open('FLC.txt', 'w')
-t_begin = 360  # Деленное на 10
-t_end = 374  # - 2
+t_begin = 3600  # Деленное на 10
+t_end = 3740  # - 2
 j_begin = 5
 j_end = 13
 
-for temp in range(t_begin, t_end, 1):
-    T = temp / 10
-    Q = 3 ** ((T - 20) / 10)
-    print(f'T = {T}, Q(T) = {round(Q, 3)}')
-    f.write(f'T = {T}, Q(T) = {round(Q, 3)}'+'\n***\n')
-    print('***')
-    for j in range(j_begin, j_end, 1):
-        I_syn = j / 10
-        par[0] = I_syn
+for j in range(j_begin, j_end):
+    I_syn = j / 10
+    par[0] = I_syn
+    #print(f'I_syn = {I_syn}: ', end='\n*****\n')
+    f.write(f'I_syn = {I_syn}'+'\n*****\n')
+    for temp in range(t_begin, t_end):
+        T = temp / 100
+        Q = 3 ** ((T - 20) / 10)
+        #print(f'T = {T}, Q(T) = {round(Q, 3)}', end=': ')
+        f.write(f'T = {T}, Q(T) = {round(Q, 3)},')
+
         par[-1] = 3 ** ((T - 20) / 10)
-        print(f'I_syn = {I_syn}: ', end=' ')
-        f.write(f'I_syn = {I_syn};')
+
         sol = sc.integrate.odeint(als.diff_ur, y0, t, args=(par,), tfirst=True)
         c_v = 0
         mx_v = max(sol[:, 0])
@@ -43,14 +44,7 @@ for temp in range(t_begin, t_end, 1):
                 c_n += 1
                 kl_n = k
 
-        if c_n == c_v and c_n > 1:
-            print('LC 99% c_v = c_n =', str(c_n))
-            f.write('LC 99% c_v = c_n = '+ str(c_n) + ' diff = '+str(abs(c_n-c_v))+'\n')
-        elif abs(c_n - c_v) < 2:
-            print(f'LC 80% c_v = {str(c_v)}, c_n = {str(c_n)}')
-            f.write(f'LC 80% c_v = {str(c_v)}, c_n = {str(c_n)}, diff = {str(abs(c_n-c_v))} \n')
-        else:
-            print(f'NLC 99% c_v = {str(c_v)}, c_n = {str(c_n)}')
-            f.write(f'NLC 99% c_v = {str(c_v)}, c_n = {str(c_n)}, diff = {str(abs(c_n-c_v))} \n')
-    print('----------------')
+        f.write(f'c_v = {c_v}, c_n = {c_n}, diff = {abs(c_v - c_n)}\n')
+    f.write(' \n ------------- \n')
+    print(round(j/(j_end - 1) * 100), '%')
 

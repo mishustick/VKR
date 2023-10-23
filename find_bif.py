@@ -30,21 +30,23 @@ par = arg
 
 t_begin = 3450  # Деленное на 100
 t_end = 3740  # - 2
-j_begin = 0
-j_end = 13
+j_begin = 90
+j_end = 110
 
 f = open('TT_BIF.txt', 'w')
+g_centr = open('TT_centr.txt', 'w')
 
 for j in range(j_begin, j_end, 1):
-    I_syn = j / 10
+    I_syn = j / 100
     #print(f'I_syn = {I_syn}')
-    f.write(f'I_syn = {I_syn}'+'\n***\n')
+    f.write(f'I_syn = {I_syn}; ')
     #print('***')
+    per = True
     for t in range(t_begin, t_end, 1):
         T = t / 100
         Q = 3 ** ((T - 20) / 10)
         #print(f'T = {T}: ', end=' ')
-        f.write(f'T = {T};')
+
         n, V = sp.symbols('n V')
         v0, n0 = zs.findroot(I_syn, T)
         pr = arg
@@ -55,7 +57,11 @@ for j in range(j_begin, j_end, 1):
         else:
             suc = False
         #print(f'V0 = {round(v0, 3)}, n0 = {round(n0, 4)}, КН = {suc}', end='; ')
-        f.write(f'V0 = {round(v0, 3)};n0 = {round(n0, 4)};КН = {suc},')
+        if per:
+            f.write(f'V0 = {round(v0, 3)}; n0 = {round(n0, 4)}; \n')
+            per = False
+        f.write(f'T = {T};')
+        f.write(f'КН = {suc},')
 
         m_inf = sp.expand(1 / (1 + sp.exp(-(V + 33.8) / 5.2)))
         h_na = sp.expand(1 / (1 + sp.exp((V + 60.5) / 9.9)))
@@ -94,7 +100,9 @@ for j in range(j_begin, j_end, 1):
             f.write('НУ;\n')
         elif abs(l1.real) < 0.0003 and abs(l2.real) < 0.0003:
             #print('Центр')
-            f.write('Центр;\n')
+            if abs(round(l1.real, 4)) == 0 and round(l2.real, 4) == 0:
+                g_centr.write(f'{I_syn}, {T}, l1 = {round(l1.imag, 4)}*i, '
+                              f'l2 = {round(l2.imag, 4)}*i, ЦЕНТР\n')
         elif l1.imag != 0 and l2.imag != 0 and l1.real < 0 and l2.real < 0:
             #print('УФ')
             f.write('УФ;\n')
@@ -108,3 +116,4 @@ for j in range(j_begin, j_end, 1):
     #print('-------------')
 
 f.close()
+g_centr.close()
